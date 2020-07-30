@@ -1,6 +1,6 @@
 package ru.cti.omiliatest;
 
-public class User {
+public class  User {
     private String user_id;
     private String email;
     private String first_name;

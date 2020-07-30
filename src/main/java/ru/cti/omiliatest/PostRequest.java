@@ -5,14 +5,14 @@ import java.util.Properties;
 public class PostRequest {
     private String application_id;
     private String source;
-    private User user = new User();
-    Context context = new Context();
+//    private User user = new User();
+//    Context context = new Context();
 
     public void setProperties(Properties properties) {
         application_id = properties.getProperty("application_id");
         source = properties.getProperty("source");
-        getProperties(properties, user);
-        context.setProperties(properties);
+//        getProperties(properties, user);
+//        context.setProperties(properties);
     }
 
     static void getProperties(Properties properties, User user) {

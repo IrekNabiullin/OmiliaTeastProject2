@@ -18,7 +18,7 @@ public class Main {
             InputStream fileInputStream = loader.getResourceAsStream("app.properties");
             //         FileInputStream fileInputStream = new FileInputStream("src/main/resources/app.properties");
             properties.load(fileInputStream);
-            host = properties.getProperty("host").intern();
+            host = properties.getProperty("host");
             accessToken = properties.getProperty("access_token");
         } catch (FileNotFoundException e) {
             System.err.println("Error: Property file not found!");
@@ -28,10 +28,16 @@ public class Main {
 
         System.out.println("Creating new Post Request");
         PostRequest postRequest = new PostRequest();
+        TestJSON testJSON = new TestJSON();
+        testJSON.setApplication_id("HCFB");
+
+//        testJSON.setUterrance("sell");
         postRequest.setProperties(properties);
         String gsonObject = GsonConvertation.convertObjectToGson(postRequest);
+//        String gsonObjectTwo = GsonConvertation.convertObjectToGson(testJSON);
         System.out.println("New Post Request created:");
         System.out.println(gsonObject);
+//        System.out.println(gsonObjectTwo);
 
         System.out.println("\nTesting - Send Https GET request");
         HttpsConnectGetURL connectionGet = new HttpsConnectGetURL();
@@ -45,6 +51,7 @@ public class Main {
         HttpsConnectPostURL connectionPost = new HttpsConnectPostURL();
         try {
             connectionPost.sendPOST(host, gsonObject);
+//            connectionPost.sendPOST(host,gsonObjectTwo);
         } catch (Exception e) {
             e.printStackTrace();
         }

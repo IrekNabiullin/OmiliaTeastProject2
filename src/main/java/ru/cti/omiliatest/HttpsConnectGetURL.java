@@ -12,6 +12,24 @@ import java.security.cert.X509Certificate;
 public class HttpsConnectGetURL {
     private String accessToken;
 
+    //костыль для SSL
+    private static TrustManager[] trustAllCerts = new TrustManager[]{
+            new X509TrustManager() {
+                public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                    return new X509Certificate[0];
+                }
+
+                public void checkClientTrusted(
+                        java.security.cert.X509Certificate[] certs, String authType) {
+                }
+
+                public void checkServerTrusted(
+                        java.security.cert.X509Certificate[] certs, String authType) {
+                }
+            }
+    };
+
+/*
     // Create a trust manager that does not validate certificate chains
     private static TrustManager[] trustAllCerts = new TrustManager[] {
             new X509TrustManager() {
@@ -21,11 +39,15 @@ public class HttpsConnectGetURL {
                 public void checkClientTrusted(X509Certificate[] certs, String authType) {}
                 public void checkServerTrusted(X509Certificate[] certs, String authType) {}
             }};
+ */
+
 
     // Ignore differences between given hostname and certificate hostname
     private static HostnameVerifier hv = new HostnameVerifier() {
         public boolean verify(String hostname, SSLSession session) { return true; }
     };
+
+
 
     public static void sendHttpGETRequest(String url, String accessToken) throws IOException {
         URL obj = new URL(url);
@@ -42,10 +64,11 @@ public class HttpsConnectGetURL {
             //после обхода сертификата
             httpsURLConnection.setRequestMethod("GET");
             httpsURLConnection.setRequestProperty("accept", "application/json");
-//        httpsURLConnection.setRequestProperty("Accept-Charset", UTF);
+        httpsURLConnection.setRequestProperty("Accept-Charset", "UTF-8");
 // есть ли ограничения по кодировке (charset) в API?
-            httpsURLConnection.setRequestProperty("Content-Type", "application/json");
-            httpsURLConnection.setRequestProperty("Authorization", "Bearer " + accessToken);
+            httpsURLConnection.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
+//            httpsURLConnection.setRequestProperty("Authorization", "Bearer " + accessToken);
+//            httpsURLConnection.setRequestProperty("Authorization", "Bearer ");
 
             int responseCode = httpsURLConnection.getResponseCode();
             System.out.println("GET Response Code: " + responseCode);
